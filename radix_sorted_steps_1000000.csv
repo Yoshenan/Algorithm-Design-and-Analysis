@@ -30,4 +30,4 @@ Before Sorting: 45,56,68,73,97,4,5,2,9,77,400,500,
 [2, 4, 5, 9, 45, 56, 68] original
 [2, 4, 5, 9, 45, 56, 68] d=1
 After Radix Sort: 2,4,5,9,45,56,68,73,77,97,400,500,
-Execution time: 0
+Execution time: 0.000000 seconds

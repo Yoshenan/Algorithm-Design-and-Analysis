@@ -3,6 +3,7 @@
 #include <fstream>
 #include<time.h>
 #include<sstream>
+#include <chrono>
 using namespace std;
 
 
@@ -42,36 +43,35 @@ void countingSortRadix(vector<int>&arr,int exp){
         arr[i]=output[i];
     }
 
-
-
 }
 
+void radixSortStep(vector<int>& arr, int n, int startRow, int endRow, ofstream& outputFile) {
+    long long placement = 1;
 
-void radixSort(vector<int>&arr){
-  if (arr.empty())return;
-
-  int maxValue= getMax(arr);
-
-
-  for(int exp=1 ; maxValue/exp;exp*=10){
-
-
-        countingSortRadix(arr,exp);
-  }
-
-
-
+    for (int d = 1; d <= 10; d++) {
+        outputFile << "(processing from the rightmost character)\n";
+        outputFile << "[";
+        for (int i = startRow; i <= endRow && i < n; i++) {
+            outputFile << arr[i];
+            if (i < endRow && i < n - 1) outputFile << ", ";
+        }
+        outputFile << "] original\n";
+        countingSortRadix(arr, placement);
+        placement *= 10;
+        outputFile << "[";
+        for (int i = startRow; i <= endRow && i < n; i++) {
+            outputFile << arr[i];
+            if (i < endRow && i < n - 1) outputFile << ", ";
+        }
+        outputFile << "] d=" << (11 - d) << "\n";
+    }
 }
-
-
 
 
 int main(){
 
-    vector<int> data;
+   vector<int> data;
 
-    clock_t  start , end;
-    double time;
 
     ifstream inputFile("dataset_1000.csv");
     if (!inputFile.is_open()) {
@@ -104,31 +104,31 @@ int main(){
 
 
 
-    ofstream MyFile("radix_sorted_dataset_1000000.csv");
+    ofstream MyFile("radix_sorted_steps_1000000.csv");
 
     MyFile << "Before Sorting: ";
     for(int num:data){
         MyFile<<num<<",";
     }
     MyFile<<"\n";
-    start = clock();
-    radixSort(data);
+    auto start = chrono::high_resolution_clock::now();
 
-    end = clock();
+    radixSortStep(data, data.size(), 0 ,6, MyFile );
 
-    time= (double) (end-start)/CLOCKS_PER_SEC;
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> executionTime = end - start;
+
 
     MyFile<< "After Radix Sort: ";
     for(int num:data){
         MyFile<<num<<",";
     }
     MyFile<<"\n";
-    MyFile<<"Execution time: "<<time<<endl;
+    MyFile << "Execution time: " << fixed << executionTime.count() << " seconds" << endl;
 
     MyFile.close();
 
     return 0;
-
 
 }
 
