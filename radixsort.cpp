@@ -61,6 +61,9 @@ void radixSort(vector<int>&arr){
 
 
 
+        countingSortRadix(arr,exp);
+  }
+
 }
 
 
@@ -103,6 +106,7 @@ int main(){
     }
 
 
+    start = clock();
 
     ofstream MyFile("radix_sorted_dataset_1000000.csv");
 
