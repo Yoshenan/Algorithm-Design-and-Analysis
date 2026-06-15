@@ -53,18 +53,14 @@ void radixSort(vector<int>&arr){
   int maxValue= getMax(arr);
 
 
-  for(int exp=1 ; maxValue/exp;exp*=10){
-
-
-        countingSortRadix(arr,exp);
-  }
-
-
+  for(int exp=1 ; maxValue/exp;exp*=10){\
 
         countingSortRadix(arr,exp);
   }
 
 }
+
+
 
 
 
