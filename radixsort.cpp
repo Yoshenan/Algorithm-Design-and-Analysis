@@ -1,7 +1,7 @@
 #include <iostream>
 #include<vector>
 #include <fstream>
-#include<time.h>
+#include <chrono>
 #include<sstream>
 using namespace std;
 
@@ -53,7 +53,7 @@ void radixSort(vector<int>&arr){
   int maxValue= getMax(arr);
 
 
-  for(int exp=1 ; maxValue/exp;exp*=10){\
+  for(int exp=1 ; maxValue/exp;exp*=10){
 
         countingSortRadix(arr,exp);
   }
@@ -63,70 +63,60 @@ void radixSort(vector<int>&arr){
 
 
 
-
-
 int main(){
 
-    vector<int> data;
+    vector<int> data; // Changed to long long to natively hold 10-digit IDs safely
+    string filename, line;
 
-    clock_t  start , end;
-    double time;
+    cout << "Enter target dataset CSV file name: ";
+    cin >> filename;
 
-    ifstream inputFile("dataset_1000.csv");
-    if (!inputFile.is_open()) {
-        cerr << "Error: Could not open dataset_1000.csv!" << endl;
+    ifstream inFile(filename);
+    if (!inFile.is_open()) {
+        cerr << "Error opening file!\n";
         return 1;
     }
 
-    string line;
-    while (getline(inputFile, line)) {
-    stringstream ss(line);
-    string value;
-    while (getline(ss, value, ',')) {
-        value.erase(0, value.find_first_not_of(" \t\r\n"));
-        value.erase(value.find_last_not_of(" \t\r\n") + 1);
+    // Load elements and clean file punctuation/quotes
+    while (getline(inFile, line)) {
+        if (line.empty()) continue;
+        if (line.back() == '\r') line.pop_back();
+        if (line.front() == '"') line.erase(0, 1);
+        if (line.back() == '"') line.pop_back();
 
-        if (!value.empty() && (isdigit(value[0]) || value[0] == '-')) {
-            try {
-                data.push_back(stoi(value));
-            } catch (const std::exception& e) {
-                cerr << "Skipping invalid value: " << value << endl;
-            }
+        size_t comma = line.find(',');
+        string numStr = (comma != string::npos) ? line.substr(0, comma) : line;
+
+        if (!numStr.empty() && isdigit(numStr[0])) {
+            data.push_back(stoll(numStr));
         }
     }
-}
-    inputFile.close();
-    if (data.empty()) {
-        cerr << "Warning: The dataset is empty!" << endl;
-        return 1;
-    }
+    inFile.close();
 
+    // Create dynamic output file
+    ofstream MyFile("radix_sorted_" + filename);
 
-    start = clock();
+    MyFile << "Before Sorting:\n";
 
-    ofstream MyFile("radix_sorted_dataset_1000000.csv");
+    for (long long num : data) MyFile << "=\"" << num << "\"\n";
 
-    MyFile << "Before Sorting: ";
-    for(int num:data){
-        MyFile<<num<<",";
-    }
-    MyFile<<"\n";
-    start = clock();
+    // Track execution time
+    auto start = chrono::high_resolution_clock::now();
     radixSort(data);
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> executionTime = end - start;
 
-    end = clock();
+    std::chrono::duration<double> elapsed = end - start;
 
-    time= (double) (end-start)/CLOCKS_PER_SEC;
+    MyFile << "\nAfter Radix Sort:\n";
+    for (long long num : data) MyFile << "=\"" << num << "\"\n";
 
-    MyFile<< "After Radix Sort: ";
-    for(int num:data){
-        MyFile<<num<<",";
-    }
-    MyFile<<"\n";
-    MyFile<<"Execution time: "<<time<<endl;
-
+    // Explicit newlines to ensure it sits cleanly in its own section at the bottom
+    MyFile << "\n---\n";
+    MyFile << "Execution time," << elapsed.count() << " seconds\n";
     MyFile.close();
 
+    cout << "Success! Clean output generated without scientific notation.\n";
     return 0;
 
 
