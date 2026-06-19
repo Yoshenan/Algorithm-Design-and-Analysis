@@ -6,9 +6,9 @@
 using namespace std;
 
 
-int getMax(vector <int> &arr){
-    int maxValue = arr[0];
-    for(int num:arr){
+long long  getMax(vector <long long > &arr){
+    long long maxValue = arr[0];
+    for(long long num:arr){
         if(num>maxValue){
             maxValue = num;
         }
@@ -17,28 +17,28 @@ int getMax(vector <int> &arr){
 
 }
 
-void countingSortRadix(vector<int>&arr,int exp){
-    int  n= arr.size();
-     vector<int>output(n);
-    int count[10] = {0};
+void countingSortRadix(vector<long long>&arr,long long exp){
+    long long  n= arr.size();
+    vector<long long>output(n);
+    long long count[10] = {0};
 
-    for(int i =0 ; i<n;i++){
-        int digit = (arr[i]/exp)%10;
+    for(long long i =0 ; i<n;i++){
+        long long digit = (arr[i]/exp)%10;
         count[digit]= count[digit]+1;
     }
 
-    for(int i =1 ; i<10;i++){
+    for(long long i =1 ; i<10;i++){
         count[i]= count[i]+count[i-1];
 
     }
 
-    for(int i =n-1;i>=0 ;i--){
-        int digit = (arr[i]/exp)%10;
+    for(long long i =n-1;i>=0 ;i--){
+        long long digit = (arr[i]/exp)%10;
         output[count[digit]-1]=arr[i];
         count[digit]=count[digit]-1;
     }
 
-    for (int i =0 ; i<n ; i++){
+    for (long long i =0 ; i<n ; i++){
         arr[i]=output[i];
     }
 
@@ -47,13 +47,13 @@ void countingSortRadix(vector<int>&arr,int exp){
 }
 
 
-void radixSort(vector<int>&arr){
+void radixSort(vector<long long>&arr){
   if (arr.empty())return;
 
-  int maxValue= getMax(arr);
+  long long maxValue= getMax(arr);
 
 
-  for(int exp=1 ; maxValue/exp;exp*=10){
+  for(long long exp=1 ; maxValue/exp;exp*=10){
 
         countingSortRadix(arr,exp);
   }
@@ -63,9 +63,9 @@ void radixSort(vector<int>&arr){
 
 
 
-int main(){
+int  main(){
 
-    vector<int> data; // Changed to long long to natively hold 10-digit IDs safely
+    vector<long long> data;
     string filename, line;
 
     cout << "Enter target dataset CSV file name: ";
@@ -93,14 +93,12 @@ int main(){
     }
     inFile.close();
 
-    // Create dynamic output file
     ofstream MyFile("radix_sorted_" + filename);
 
     MyFile << "Before Sorting:\n";
 
     for (long long num : data) MyFile << "=\"" << num << "\"\n";
 
-    // Track execution time
     auto start = chrono::high_resolution_clock::now();
     radixSort(data);
     auto end = chrono::high_resolution_clock::now();
@@ -111,7 +109,6 @@ int main(){
     MyFile << "\nAfter Radix Sort:\n";
     for (long long num : data) MyFile << "=\"" << num << "\"\n";
 
-    // Explicit newlines to ensure it sits cleanly in its own section at the bottom
     MyFile << "\n---\n";
     MyFile << "Execution time," << elapsed.count() << " seconds\n";
     MyFile.close();
