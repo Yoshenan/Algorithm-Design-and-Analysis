@@ -115,7 +115,7 @@ void writeDataset(const std::string& filename, const std::vector<Record>& record
 // ---------------------------------------------------------------
 int main(int argc, char** argv) {
     // Usage: ./heap_sort dataset_1000000.csv
-    std::string inputFile = (argc > 1) ? argv[1] : "dataset_1000.csv";
+    std::string inputFile = (argc > 1) ? argv[1] : "dataset.csv";
 
     // ---- READ (not timed) ----
     std::vector<Record> data = readDataset(inputFile);
