@@ -22,7 +22,7 @@ long long  countLines(const string& filename) {
     return lines;
 }
 
-long long  countingSortRadix(DataRow arr[], long long  n, long long exp) {
+void countingSortRadix(DataRow arr[], long long  n, long long exp) {
     DataRow* output = new DataRow[n];
     int count[10] = {0};
 
@@ -53,7 +53,7 @@ void radixSortStep(DataRow arr[], long long  n, long long startRow, long long en
     if (!outputFile.is_open()) return;
 
     long long placement = 1;
-    for ( long long = 1; d <= 10; d++) {
+    for ( long long d = 1; d <= 10; d++) {
         outputFile << "(processing from the rightmost character)\n";
 
         outputFile << "[";
@@ -79,9 +79,9 @@ void radixSortStep(DataRow arr[], long long  n, long long startRow, long long en
 int main() {
 
 
-    const string  csvFilename = " ";
-    const int  startRow = " ";
-    const int  endRow = " ";
+    const string  csvFilename = "dataset_100000.csv";
+    int  startRow = 0;
+    int  endRow = 100000;
 
 
     int maxLines = countLines(csvFilename);
