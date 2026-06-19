@@ -6,7 +6,7 @@
 using namespace std;
 
 
-long long  getMax(vector <long long > &arr){
+long long getMax(vector <long long > &arr){
     long long maxValue = arr[0];
     for(long long num:arr){
         if(num>maxValue){
@@ -66,10 +66,9 @@ void radixSort(vector<long long>&arr){
 int  main(){
 
     vector<long long> data;
-    string filename, line;
+    string line;
 
-    cout << "Enter target dataset CSV file name: ";
-    cin >> filename;
+    const string filename = "dataset_10.csv";
 
     ifstream inFile(filename);
     if (!inFile.is_open()) {
@@ -77,7 +76,6 @@ int  main(){
         return 1;
     }
 
-    // Load elements and clean file punctuation/quotes
     while (getline(inFile, line)) {
         if (line.empty()) continue;
         if (line.back() == '\r') line.pop_back();
