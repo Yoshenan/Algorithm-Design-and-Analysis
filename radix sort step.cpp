@@ -11,7 +11,7 @@ struct DataRow {
     string strKey;
 };
 
-int countLines(const string& filename) {
+long long  countLines(const string& filename) {
     ifstream file(filename);
     if (!file.is_open()) return 0;
     int lines = 0;
@@ -22,7 +22,7 @@ int countLines(const string& filename) {
     return lines;
 }
 
-void countingSortRadix(DataRow arr[], int n, long long exp) {
+long long  countingSortRadix(DataRow arr[], long long  n, long long exp) {
     DataRow* output = new DataRow[n];
     int count[10] = {0};
 
@@ -48,16 +48,16 @@ void countingSortRadix(DataRow arr[], int n, long long exp) {
     delete[] output;
 }
 
-void radixSortStep(DataRow arr[], int n, int startRow, int endRow, const string& outputFilename) {
+void radixSortStep(DataRow arr[], long long  n, long long startRow, long long endRow, const string& outputFilename) {
     ofstream outputFile(outputFilename);
     if (!outputFile.is_open()) return;
 
     long long placement = 1;
-    for (int d = 1; d <= 10; d++) {
+    for ( long long = 1; d <= 10; d++) {
         outputFile << "(processing from the rightmost character)\n";
 
         outputFile << "[";
-        for (int i = startRow; i <= endRow && i < n; i++) {
+        for (long long  i = startRow; i <= endRow && i < n; i++) {
             outputFile << arr[i].intKey << "/" << arr[i].strKey;
             if (i < endRow && i < n - 1) outputFile << ", ";
         }
@@ -67,7 +67,7 @@ void radixSortStep(DataRow arr[], int n, int startRow, int endRow, const string&
         placement *= 10;
 
         outputFile << "[";
-        for (int i = startRow; i <= endRow && i < n; i++) {
+        for (long long  i = startRow; i <= endRow && i < n; i++) {
             outputFile << arr[i].intKey << "/" << arr[i].strKey;
             if (i < endRow && i < n - 1) outputFile << ", ";
         }
@@ -77,15 +77,12 @@ void radixSortStep(DataRow arr[], int n, int startRow, int endRow, const string&
 }
 
 int main() {
-    string csvFilename;
-    int startRow, endRow;
 
-    cout << "Enter target dataset CSV file name: ";
-    cin >> csvFilename;
-    cout << "Enter tracking start row index: ";
-    cin >> startRow;
-    cout << "Enter tracking end row index: ";
-    cin >> endRow;
+
+    const string  csvFilename = " ";
+    const int  startRow = " ";
+    const int  endRow = " ";
+
 
     int maxLines = countLines(csvFilename);
     if (maxLines == 0) {
@@ -98,7 +95,6 @@ int main() {
     string line;
     int idx = 0;
 
-    // Clean, natural loop that parses generated datasets perfectly
     while (getline(inFile, line)) {
         if (line.empty()) continue;
         if (line.back() == '\r') line.pop_back();
@@ -107,8 +103,6 @@ int main() {
         if (commaPos != string::npos) {
             string part1 = line.substr(0, commaPos);
             string part2 = line.substr(commaPos + 1);
-
-            // Simple verification: make sure it's not a text header row
             if (part1[0] >= '0' && part1[0] <= '9') {
                 dataset[idx].intKey = stoll(part1);
                 dataset[idx].strKey = part2;
