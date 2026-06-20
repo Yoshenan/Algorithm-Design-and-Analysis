@@ -1,9 +1,26 @@
+// *********************************************************
+// Program: radix sort step.cpp
+// Course: CCP6214 Algorithm Design and Analysis
+// Lecture Class: TC4L
+// Tutorial Class: T15L
+// Trimester: 2610
+// Member_1: 243UC247CZ | ABDULLAH HAKEEM BIN AHMAD KAMAL | ABDULLAH.HAKEEM.AHMAD.KAMALr@student.mmu.edu.my  | 012-418-8300
+// Member_2: 242UC244GD | Yoshenan A/L Shanker |YOSHENAN.SHANKER@student.mmu.edu.my  | 011-3310-7367
+// Member_3: 243UC2463Z | PRABU NATAR A/L DHARMENDRA | PRABU.NATAR.DHARMENDRA@student.mmu.edu.my  | 017-322-0572
+// Member_4: 243UC247BQ | HEMARAJ A/L RAJAN  | HEMARAJ.RAJAN@student.mmu.edu.my   | 014-377-3108
+// *********************************************************
+// Task Distribution
+// Member_1: Implementation of dataset generator
+// Member_2:Implementation of radix sort and radix sort step
+// Member_3:Implementation of heap sort and heap sort step
+// Member_4:Implementation of hash table and hash table search
+// *********************************************************
+
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <string>
-
 using namespace std;
 
 struct DataRow {
@@ -14,7 +31,7 @@ struct DataRow {
 long long  countLines(const string& filename) {
     ifstream file(filename);
     if (!file.is_open()) return 0;
-    int lines = 0;
+    long long  lines = 0;
     string line;
     while (getline(file, line)) {
         if (!line.empty()) lines++;
@@ -22,7 +39,7 @@ long long  countLines(const string& filename) {
     return lines;
 }
 
-void countingSortRadix(DataRow arr[], long long  n, long long exp) {
+void  countingSortRadix(DataRow arr[], long long  n, long long exp) {
     DataRow* output = new DataRow[n];
     int count[10] = {0};
 
@@ -53,7 +70,7 @@ void radixSortStep(DataRow arr[], long long  n, long long startRow, long long en
     if (!outputFile.is_open()) return;
 
     long long placement = 1;
-    for ( long long d = 1; d <= 10; d++) {
+    for ( long long d  = 1; d <= 10; d++) {
         outputFile << "(processing from the rightmost character)\n";
 
         outputFile << "[";
@@ -77,11 +94,9 @@ void radixSortStep(DataRow arr[], long long  n, long long startRow, long long en
 }
 
 int main() {
-
-
-    const string  csvFilename = "dataset_100000.csv";
+    const string  csvFilename = "dataset_10.csv ";
     int  startRow = 0;
-    int  endRow = 100000;
+    int  endRow = 6;
 
 
     int maxLines = countLines(csvFilename);
@@ -127,7 +142,10 @@ int main() {
                              + to_string(endRow) + ".txt";
 
     radixSortStep(dataset, n, startRow, endRow, stepOutputName);
+
+    cout << "Output Generated to :" << "radix_sorted_" +csvFilename;
     delete[] dataset;
 
     return 0;
 }
+
