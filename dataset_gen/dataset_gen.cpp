@@ -72,11 +72,9 @@ int main() {
 
     //  Writing data to file
     for (int i = 0; i < 7; i++) { // Writes the first seven fixed numbers
-        // cout << firstSeven[i] << endl;
         writeTo(datasetName, firstSevenInt[i] + "," + firstSevenChar[i]);
     }
     for (int i = 7; i <= inputNum; i++) { // writes the rest to file
-        // cout << (rand() % 10000000000 + minVal) << "," << charRand() << endl;
         writeTo(datasetName, to_string(rand() % 10000000000 + minVal) + "," + charRand());
         }
 
