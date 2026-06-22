@@ -27,10 +27,10 @@ using namespace std;
 
 class UniqueLCG { // to ensure unique random numbers
 public:
-    static constexpr uint64_t RANGE  = 9000000000ULL;
-    static constexpr uint64_t OFFSET = 1000000000ULL;
-    static constexpr uint64_t A      = 1000000021ULL;
-    static constexpr uint64_t C      = 1013904223ULL;
+    static const uint64_t RANGE  = 9000000000ULL;
+    static const uint64_t OFFSET = 1000000000ULL;
+    static const uint64_t A      = 1000000021ULL;
+    static const uint64_t C      = 1013904223ULL;
 
     explicit UniqueLCG(uint64_t seed) : state_(seed % RANGE), count_(0) {}
 
@@ -105,9 +105,19 @@ int main() {
     srand((unsigned int)2431324736); // rand() seed
 
     // Input
-    cout << "Enter the number of random numbers to generate: ";
-    cin >> inputNum;
-    cout << "Generating random numbers..." << endl;
+    inputNum = 1000;
+    // inputNum = 2000;
+    // inputNum = 5000;
+    // inputNum = 10000;
+    // inputNum = 25000;
+    // inputNum = 50000;
+    // inputNum = 100000;
+    // inputNum = 250000;
+    // inputNum = 500000;
+    // inputNum = 1000000;
+    // inputNum = 5000000;
+    // inputNum = 25000000;
+    cout << "Generating " << inputNum << " random numbers..." << endl;
 
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
@@ -150,6 +160,5 @@ int main() {
 /* -- References -- */
 // https://cplusplus.com/reference/cstdlib/rand/
 // https://en.wikipedia.org/wiki/Linear_congruential_generator
-// https://stackoverflow.com/questions/1202687/how-do-i-get-a-specific-range-of-numbers-from-rand
 // https://stackoverflow.com/questions/4859089/always-repeated-numbers-given-by-rand
 // https://www.w3schools.com/cpp/cpp_files.asp
