@@ -1,5 +1,5 @@
 // *********************************************************
-// Program: Hash table search.cpp
+// Program: Hash_table_search.cpp
 // Course: CCP6214 Algorithm Design and Analysis
 // Lecture Class: TC4L
 // Tutorial Class: T15L
