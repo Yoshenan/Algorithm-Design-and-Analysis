@@ -1,5 +1,5 @@
 // *********************************************************
-// Program: YOUR_FILENAME.cpp
+// Program: dataset_gen.cpp
 // Course: CCP6214 Algorithm Design and Analysis
 // Lecture Class: TC4L
 // Tutorial Class: T15L
@@ -11,23 +11,51 @@
 // *********************************************************
 // Task Distribution
 // Member_1: Implementation of dataset generator
-// Member_2:Implementation of radix sort and radix sort step
-// Member_3:Implementation of heap sort and heap sort step
-// Member_4:Implementation of hash table and hash table search
+// Member_2: Implementation of radix sort and radix sort step
+// Member_3: Implementation of heap sort and heap sort step
+// Member_4: Implementation of hash table and hash table search
 // *********************************************************
-
-
-
 
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <cstdint>
 #include <string>
+#include <chrono>
 
 using namespace std;
 
+class UniqueLCG { // to ensure unique random numbers
+public:
+    static constexpr uint64_t RANGE  = 9000000000ULL;
+    static constexpr uint64_t OFFSET = 1000000000ULL;
+    static constexpr uint64_t A      = 1000000021ULL;
+    static constexpr uint64_t C      = 1013904223ULL;
+
+    explicit UniqueLCG(uint64_t seed) : state_(seed % RANGE), count_(0) {}
+
+    // Returns next unique integer
+    long long next() {
+        state_ = (A * state_ + C) % RANGE;
+        ++count_;
+        return static_cast<long long>(state_ + OFFSET);
+    }
+    bool hasNext() const { return count_ < RANGE; }
+
+private:
+    uint64_t state_;
+    uint64_t count_;
+};
+
+// Combines three rand() calls cus rand() does not have enough range
+static uint64_t rand64() {
+    return ((uint64_t)rand() << 30)
+         | ((uint64_t)rand() << 15)
+         |  (uint64_t)rand();
+}
+
 // --- Global variables ---
-long long  minVal = 1000000000;
+long long minVal = 1000000000;
 int inputNum;
 
 char charArr[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
@@ -79,7 +107,7 @@ int main() {
     // Input
     cout << "Enter the number of random numbers to generate: ";
     cin >> inputNum;
-    cout << "Generating random numbers" << endl;
+    cout << "Generating random numbers..." << endl;
 
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
@@ -92,24 +120,36 @@ int main() {
         return 1;
     }
 
-    for (int i = 0; i < 7; i++) { // Writes the first seven fixed numbers
+    auto start = std::chrono::system_clock::now(); // Generation start time
 
-        writeTo(datasetFile, firstSevenInt[i] , firstSevenChar[i]);
+    // Write the first seven fixed entries
+    for (int i = 0; i < 7; i++) {
+        writeTo(datasetFile, firstSevenInt[i], firstSevenChar[i]);
     }
-    for (int i = 7; i < inputNum; i++) {
-        long long uniqueNum = (((long long)rand() * rand()) % (999999999 - 10000000 + 1) + minVal);
 
+    // Seeds LCG with rand64 which is seeded by srand
+    UniqueLCG lcg(rand64());
+
+    // Generate remaining entries
+    for (int i = 7; i < inputNum; i++) {
+        long long uniqueNum = lcg.next();
         writeTo(datasetFile, to_string(uniqueNum), charRand());
     }
 
     datasetFile.close();
 
-    cout << "Random numbers generated and written to file: " << datasetName << ".csv" <<"\n" ;
+    auto end = chrono::system_clock::now();
+    auto genTime = chrono::duration_cast<std::chrono::milliseconds>(end - start); // Generation end time
+    
+
+    cout << "Dataset generated, written to: " << datasetName << ".csv" << "\n";
+    cout << "Runtime: " << genTime.count() << " ms" << endl;
 }
 
 
 /* -- References -- */
 // https://cplusplus.com/reference/cstdlib/rand/
+// https://en.wikipedia.org/wiki/Linear_congruential_generator
 // https://stackoverflow.com/questions/1202687/how-do-i-get-a-specific-range-of-numbers-from-rand
 // https://stackoverflow.com/questions/4859089/always-repeated-numbers-given-by-rand
 // https://www.w3schools.com/cpp/cpp_files.asp
